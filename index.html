@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portafolio Ambrosio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-main: #000000;
+      --text-muted: #767676;
+      --border-color: #e5e5e5;
+      --font-editorial: 'Bodoni Moda', serif;
+      --font-sans: 'Inter', -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      padding: 3rem 4rem;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      max-width: 1600px;
+      margin: 0 auto 5rem auto;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--text-main);
+    }
+
+    .brand-title {
+      font-family: var(--font-editorial);
+      font-size: 3.2rem;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      line-height: 0.9;
+    }
+
+    .btn-add {
+      background: none;
+      color: var(--text-main);
+      border: 1px solid var(--text-main);
+      padding: 0.75rem 2rem;
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-add:hover {
+      background-color: var(--text-main);
+      color: var(--bg-color);
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 4rem 2.5rem;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .image-wrapper {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background-color: #f4f4f4;
+      overflow: hidden;
+      margin-bottom: 1.2rem;
+      position: relative;
+    }
+
+    .card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(20%);
+      transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease;
+    }
+
+    .project-card:hover .card-image {
+      transform: scale(1.03);
+      filter: grayscale(0%);
+    }
+
+    /* Menú de 3 Puntos */
+    .three-dots-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: background 0.2s;
+    }
+
+    .three-dots-btn:hover {
+      background: #ffffff;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 45px;
+      right: 10px;
+      background: #ffffff;
+      border: 1px solid var(--text-main);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 20;
+      flex-direction: column;
+      min-width: 120px;
+    }
+
+    .dropdown-menu.show {
+      display: flex;
+    }
+
+    .dropdown-item {
+      background: none;
+      border: none;
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      color: var(--text-main);
+      transition: background 0.2s;
+    }
+
+    .dropdown-item:hover {
+      background: #f4f4f4;
+    }
+
+    .dropdown-item.delete {
+      color: #e53e3e;
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-title {
+      font-family: var(--font-editorial);
+      font-size: 1.4rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .card-description {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      line-height: 1.4;
+      text-transform: lowercase;
+    }
+
+    .btn-view {
+      background: none;
+      border: 1px solid var(--border-color);
+      padding: 0.6rem 1.2rem;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-main);
+      text-decoration: none;
+      align-self: flex-start;
+      transition: all 0.2s ease;
+    }
+
+    .btn-view:hover {
+      border-color: var(--text-main);
+      background-color: var(--text-main);
+      color: var(--bg-color);
+    }
+
+    .empty-message {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(5px);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      padding: 3rem;
+      width: 100%;
+      max-width: 500px;
+      border: 1px solid var(--text-main);
+    }
+
+    .modal-content h2 {
+      font-family: var(--font-editorial);
+      font-size: 2rem;
+      font-weight: 400;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 500;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 0;
+      border: none;
+      border-bottom: 1px solid var(--border-color);
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      background: transparent;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      border-bottom-color: var(--text-main);
+    }
+
+    .file-input-wrapper {
+      margin-top: 0.5rem;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      border-bottom: none;
+      font-size: 0.75rem;
+    }
+
+    .divider-text {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin: 0.5rem 0;
+      text-transform: uppercase;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .btn-cancel {
+      background: none;
+      color: var(--text-muted);
+      border: none;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      background: var(--text-main);
+      color: var(--bg-color);
+      border: 1px solid var(--text-main);
+      padding: 0.75rem 2rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 2rem 1.5rem; }
+      header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+      .brand-title { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1 class="brand-title">Portafolio<br>Ambrosio</h1>
+    <button class="btn-add" onclick="openModal()">+ Agregar Proyecto</button>
+  </header>
+
+  <main class="grid-container" id="projectsContainer"></main>
+
+  <div class="modal" id="projectModal">
+    <div class="modal-content">
+      <h2 id="modalTitle">Nuevo Proyecto</h2>
+      <form id="projectForm" onsubmit="saveProject(event)">
+        <input type="hidden" id="editIndex" value="-1" />
+
+        <div class="form-group">
+          <label for="title">Título del Proyecto</label>
+          <input type="text" id="title" required placeholder="p. ej. Proyecto Uno" />
+        </div>
+
+        <div class="form-group">
+          <label for="link">URL del Proyecto (Link)</label>
+          <input type="url" id="link" placeholder="https://..." required />
+        </div>
+
+        <div class="form-group">
+          <label>Imagen del Proyecto</label>
+          <input type="url" id="image" placeholder="Pegar URL de la imagen (https://...)" />
+          <div class="divider-text">— o subir desde el equipo —</div>
+          <div class="file-input-wrapper">
+            <input type="file" id="imageFile" accept="image/*" onchange="handleFileUpload(event)" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descripción Corta</label>
+          <textarea id="description" rows="2" placeholder="Resumen breve"></textarea>
+        </div>
+
+        <div class="modal-buttons">
+          <button type="button" class="btn-cancel" onclick="closeModal()">Cancelar</button>
+          <button type="submit" class="btn-submit">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('projectModal');
+    const container = document.getElementById('projectsContainer');
+    let uploadedBase64Image = "";
+
+    let projects = JSON.parse(localStorage.getItem('ambrosio_projects_v3')) || [];
+
+    function renderProjects() {
+      container.innerHTML = '';
+
+      if (projects.length === 0) {
+        container.innerHTML = `<div class="empty-message">No hay proyectos agregados aún. Haz clic en "+ Agregar Proyecto" para empezar.</div>`;
+        return;
+      }
+
+      projects.forEach((proj, index) => {
+        const card = document.createElement('div');
+        card.className = 'project-card';
+
+        const fallbackImg = "data:image/svg+xml;charset=UTF-8,%3Csvg width='600' height='800' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' fill='%23f4f4f4'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='12' fill='%23a0a0a0' text-anchor='middle'%3ESIN IMAGEN%3C/text%3E%3C/svg%3E";
+
+        card.innerHTML = `
+          <div class="image-wrapper">
+            <button class="three-dots-btn" onclick="toggleDropdown(event, ${index})">⋮</button>
+            <div class="dropdown-menu" id="dropdown-${index}">
+              <button class="dropdown-item" onclick="editProject(${index})">Editar</button>
+              <button class="dropdown-item delete" onclick="deleteProject(${index})">Eliminar</button>
+            </div>
+            <img 
+              src="${proj.image || fallbackImg}" 
+              alt="${proj.title}" 
+              class="card-image"
+              onerror="this.onerror=null; this.src='${fallbackImg}';"
+            >
+          </div>
+          <div class="card-content">
+            <h2 class="card-title">${proj.title}</h2>
+            <p class="card-description">${proj.description || ''}</p>
+          </div>
+          <a class="btn-view" href="${proj.link}" target="_blank" rel="noopener noreferrer">Ver Proyecto ↗</a>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function toggleDropdown(event, index) {
+      event.stopPropagation();
+      // Cerrar otros menús abiertos
+      document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        if (menu.id !== `dropdown-${index}`) menu.classList.remove('show');
+      });
+      const currentMenu = document.getElementById(`dropdown-${index}`);
+      currentMenu.classList.toggle('show');
+    }
+
+    // Cerrar el menú desplegable al hacer clic fuera
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('show'));
+    });
+
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          uploadedBase64Image = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function openModal() {
+      document.getElementById('modalTitle').textContent = 'Nuevo Proyecto';
+      document.getElementById('editIndex').value = '-1';
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      modal.style.display = 'none';
+      document.getElementById('projectForm').reset();
+      uploadedBase64Image = "";
+    }
+
+    function editProject(index) {
+      const proj = projects[index];
+      document.getElementById('modalTitle').textContent = 'Editar Proyecto';
+      document.getElementById('editIndex').value = index;
+      document.getElementById('title').value = proj.title;
+      document.getElementById('link').value = proj.link;
+      
+      if (proj.image && !proj.image.startsWith('data:image')) {
+        document.getElementById('image').value = proj.image;
+      } else {
+        document.getElementById('image').value = '';
+      }
+      
+      document.getElementById('description').value = proj.description || '';
+      uploadedBase64Image = proj.image && proj.image.startsWith('data:image') ? proj.image : "";
+      
+      modal.style.display = 'flex';
+    }
+
+    function deleteProject(index) {
+      if (confirm('¿Estás seguro de que deseas eliminar este proyecto?')) {
+        projects.splice(index, 1);
+        localStorage.setItem('ambrosio_projects_v3', JSON.stringify(projects));
+        renderProjects();
+      }
+    }
+
+    function saveProject(event) {
+      event.preventDefault();
+      
+      const editIndex = parseInt(document.getElementById('editIndex').value, 10);
+      const imageUrlInput = document.getElementById('image').value;
+      const finalImage = uploadedBase64Image || imageUrlInput;
+
+      const projectData = {
+        title: document.getElementById('title').value,
+        link: document.getElementById('link').value,
+        image: finalImage,
+        description: document.getElementById('description').value
+      };
+
+      if (editIndex === -1) {
+        projects.push(projectData);
+      } else {
+        projects[editIndex] = projectData;
+      }
+
+      localStorage.setItem('ambrosio_projects_v3', JSON.stringify(projects));
+      renderProjects();
+      closeModal();
+    }
+
+    renderProjects();
+  </script>
+</body>
+</html>
